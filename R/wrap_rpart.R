@@ -3,10 +3,12 @@
 #'@param newdata dataframe with requisite columns
 #'@export
 
-wrap_rpart <- function(newdata)
+wrap_rpart <- function(formula_char,newdata, weight_vec)
 {
-  #first ignore formula char and the weights
-  tree_fit <- rpart::rpart(Y~X,newdata)
+  formula <- as.formula(formula_char)
+  tmp_wt <<- weight_vec
+  rpart_control <- rpart::rpart.control(cp=0)
+  tree_fit <- rpart::rpart(formula,newdata,weights = tmp_wt, control = rpart_control)
   train_learn <- predict(tree_fit,type="class")
   num_class <- as.numeric(levels(train_learn))[train_learn]
   return(num_class)

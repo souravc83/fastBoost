@@ -4,7 +4,14 @@
 \alias{adaboost_fast}
 \title{fast implementation of adaboost using Rcpp}
 \usage{
-adaboost_fast()
+adaboost_fast(formula, data, nIter, ...)
+}
+\arguments{
+\item{formula}{Formula for models}
+
+\item{data}{Input dataframe}
+
+\item{nIter}{no. of classifiers}
 }
 \description{
 fast implementation of adaboost using Rcpp

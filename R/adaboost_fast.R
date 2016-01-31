@@ -1,13 +1,17 @@
-rpart_wrap <- function(x){return(2*x)}
 #'fast implementation of adaboost using Rcpp
+#'@import rpart
+#'@param formula Formula for models
+#'@param data Input dataframe
+#'@param nIter no. of classifiers 
 #'@export
-adaboost_fast<-function()
+#'
+adaboost_fast<-function(formula, data, nIter, ...)
 {
+  #all precondition checks
+  
+  formula_char <- as.character(formula)
+  
+  
 
-  print(fastboost_rpart_test_(3,rpart_wrap))
-  fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
-  fakedata$Y <- factor(fakedata$Y)
-  x <- call_rpart_(wrap_rpart, fakedata)
-  print(x)
 }
 

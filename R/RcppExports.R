@@ -5,7 +5,7 @@ fastboost_rpart_test_ <- function(x, call_rpart) {
     .Call('fastBoost_fastboost_rpart_test_', PACKAGE = 'fastBoost', x, call_rpart)
 }
 
-call_rpart_ <- function(wrap_rpart, newdata) {
-    .Call('fastBoost_call_rpart_', PACKAGE = 'fastBoost', wrap_rpart, newdata)
+call_rpart_ <- function(wrap_rpart, newdata, weight_vec) {
+    .Call('fastBoost_call_rpart_', PACKAGE = 'fastBoost', wrap_rpart, newdata, weight_vec)
 }
 

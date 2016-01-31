@@ -18,14 +18,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // call_rpart_
-int call_rpart_(Function wrap_rpart, DataFrame newdata);
-RcppExport SEXP fastBoost_call_rpart_(SEXP wrap_rpartSEXP, SEXP newdataSEXP) {
+NumericVector call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_vec);
+RcppExport SEXP fastBoost_call_rpart_(SEXP wrap_rpartSEXP, SEXP newdataSEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type newdata(newdataSEXP);
-    __result = Rcpp::wrap(call_rpart_(wrap_rpart, newdata));
+    Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
+    __result = Rcpp::wrap(call_rpart_(wrap_rpart, newdata, weight_vec));
     return __result;
 END_RCPP
 }

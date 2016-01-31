@@ -4,7 +4,7 @@
 \alias{wrap_rpart}
 \title{wraps the rpart call for ease of use with Rcpp}
 \usage{
-wrap_rpart(newdata)
+wrap_rpart(formula_char, newdata, weight_vec)
 }
 \arguments{
 \item{newdata}{dataframe with requisite columns}
