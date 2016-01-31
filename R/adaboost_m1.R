@@ -1,9 +1,11 @@
 #'adaBoost
 #'
 #'Implements Freund's Adaboost.M1 algorithm
+#'@import rpart
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
+#'@export 
 #'@examples 
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
@@ -20,12 +22,12 @@ adaBoost <-function(formula, data, nIter,...)
   weights_t <- rep(1/num_examples,num_examples)
   tree_list <- list()
   coeff_vector <- rep(0,nIter)
-  rpart_control <- rpart.control(cp=0)
+  rpart_control <- rpart::rpart.control(cp=0)
   for(i in 1:nIter)
   {
 
     temp_wt <<- weights_t
-    tree_fit <- rpart(formula, data, weights=temp_wt,  control = rpart_control)
+    tree_fit <- rpart::rpart(formula, data, weights=temp_wt,  control = rpart_control)
     tree_list[[i]] <- tree_fit
     train_learn <- predict(tree_fit,type="class")
     agreement <- as.numeric(vardep!=train_learn)
