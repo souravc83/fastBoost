@@ -1,0 +1,23 @@
+Package: fastBoost
+Type: Package
+Title: a Fast Adaboost Implementation
+Description: A fast implementation of adaboost, suitable fot big datasets
+    and covering various flavors of adaboost
+Version: 1.0
+Date: 2016-01-30
+Author: person("Sourav", "Chatterjee", , "souravc83@gmail.com", c("aut", "cre"))
+Maintainer: Sourav Chatterjee <souravc83@gmail.com>
+License: MIT + file LICENSE
+URL: https://github.com/souravc83/fastBoost
+BugReports: https://github.com/souravc83/fastBoost/issues
+Depends:
+    R (>= 3.1.2)
+Imports:
+    Rcpp,
+    rpart
+Suggests:
+    testthat
+VignetteBuilder: knitr
+LazyData: yes
+LinkingTo: Rcpp (>= 0.12.0)
+RoxygenNote: 5.0.1
