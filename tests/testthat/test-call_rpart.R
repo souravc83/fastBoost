@@ -9,6 +9,6 @@ test_that("rpart call from Rcpp works",{
   
   tree <- x$tree
   predictions <- predict(tree, newdata=fakedata, type="class")
-  print(predictions)
+  #print(predictions)
   
 })

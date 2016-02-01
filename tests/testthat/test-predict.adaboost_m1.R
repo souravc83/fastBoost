@@ -8,5 +8,6 @@ test_that("predicting adaboost works",{
   A <- adaBoost(Y~X, fakedata, 10)  
   pred <- predict(A,newdata=fakedata)
   err <- length(which(pred$class!=as.numeric(fakedata$Y)))/nrow(fakedata)
+  print(err)
   expect_true(err<1.)
 })
