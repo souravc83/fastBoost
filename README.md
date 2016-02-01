@@ -5,13 +5,7 @@ output:
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
+
 
 
 # fastBoost
@@ -25,12 +19,14 @@ weeks until I get it to shape.
 
 It is not submitted to CRAN yet.
 If you must install it:
-```{r,eval = FALSE}
+
+```r
 devtools::install_github("souravc83/fastBoost")
 ```
 
 ## Load the package
-```{r,eval = FALSE}
+
+```r
 library("fastBoost")
 ```
 
