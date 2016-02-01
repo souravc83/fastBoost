@@ -9,3 +9,7 @@ call_rpart_ <- function(wrap_rpart, newdata, weight_vec) {
     .Call('fastBoost_call_rpart_', PACKAGE = 'fastBoost', wrap_rpart, newdata, weight_vec)
 }
 
+adaboost_main_loop_ <- function(formula_char, data_df, nIter, wrap_rpart) {
+    .Call('fastBoost_adaboost_main_loop_', PACKAGE = 'fastBoost', formula_char, data_df, nIter, wrap_rpart)
+}
+

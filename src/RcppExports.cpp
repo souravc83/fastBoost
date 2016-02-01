@@ -18,7 +18,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // call_rpart_
-NumericVector call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_vec);
+List call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_vec);
 RcppExport SEXP fastBoost_call_rpart_(SEXP wrap_rpartSEXP, SEXP newdataSEXP, SEXP weight_vecSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -27,6 +27,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DataFrame >::type newdata(newdataSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
     __result = Rcpp::wrap(call_rpart_(wrap_rpart, newdata, weight_vec));
+    return __result;
+END_RCPP
+}
+// adaboost_main_loop_
+List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter, Function wrap_rpart);
+RcppExport SEXP fastBoost_adaboost_main_loop_(SEXP formula_charSEXP, SEXP data_dfSEXP, SEXP nIterSEXP, SEXP wrap_rpartSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type formula_char(formula_charSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data_df(data_dfSEXP);
+    Rcpp::traits::input_parameter< int >::type nIter(nIterSEXP);
+    Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
+    __result = Rcpp::wrap(adaboost_main_loop_(formula_char, data_df, nIter, wrap_rpart));
     return __result;
 END_RCPP
 }
