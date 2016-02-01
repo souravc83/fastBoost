@@ -6,8 +6,6 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
-
 # fastBoost
 fastBoost is a fast implementation of adaboost for R. It uses C++ code in the backend to provide
 a much faster adaboost implementation than currently available libraries in R. This is especially

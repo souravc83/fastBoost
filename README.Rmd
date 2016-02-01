@@ -5,14 +5,6 @@ output:
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
-
 
 # fastBoost
 fastBoost is a fast implementation of adaboost for R. It uses C++ code in the backend to provide
