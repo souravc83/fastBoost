@@ -13,6 +13,9 @@ adaboost_fast(formula, data, nIter, ...)
 
 \item{nIter}{no. of classifiers}
 }
+\value{
+adaboost_object An object of class adaboost containing each tree, and its corresponding weight
+}
 \description{
 fast implementation of adaboost using Rcpp
 }

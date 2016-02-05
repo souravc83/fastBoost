@@ -3,8 +3,15 @@
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
+#'@return adaboost_object An object of class adaboost containing each tree, and its corresponding weight
 #'@export
-#'
+
+# TODO before CRAN release:
+# boosting.cv: cross validation
+# importance plot: variable importance
+# is extension to multiclass easy?
+# coefficients: Breiman. Zhu?
+
 adaboost_fast<-function(formula, data, nIter, ...)
 {
   #all precondition checks

@@ -106,6 +106,11 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
     //Rcout<<tree_prediction<<std::endl;
     err = calculate_error(vardep, tree_prediction, weight_numvec);
     
+    if(err>0.5)
+    {
+      coeff_vector.erase( coeff_vector.begin()+i+1,coeff_vector.end() );
+      break;
+    }
     //Rcout<<"Error:"<< err<<std::endl;
     alpha = 0.5*log((1.-err)/err);
     //Rcout<<alpha<<std::endl;

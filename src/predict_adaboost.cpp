@@ -1,0 +1,78 @@
+#include <Rcpp.h>
+using namespace Rcpp;
+
+
+// [[Rcpp::export]]
+List predict_adaboost_(List tree_list, NumericVector coeff_vector, 
+                        DataFrame newdata, int num_examples, Function wrap_rpart_predict)
+{
+  int nIter = coeff_vector.size();
+  NumericMatrix pred_mat(num_examples, nIter);
+
+  
+  for(int i =0;i<nIter;i++)
+  {  
+    NumericVector predict_class = as<NumericVector>(wrap_rpart_predict(tree_list[i],newdata));
+    for(int j=0;j<num_examples;j++)
+      pred_mat(j,i) = predict_class[j];
+  }
+  //keep in mind multi-class
+  int num_classes = 2;
+  NumericMatrix final_class(num_examples, num_classes);
+  int indicator = 0;
+  double class_vote = 0.;
+  for(int i=0;i<num_classes;i++)
+  {
+    
+    for(int j=0;j<num_examples;j++)
+    {
+      class_vote = 0.;
+      for(int k=0;k<nIter;k++)
+      {
+        if(pred_mat(j,k)==(i+1))
+          indicator = 1;
+        class_vote += indicator*coeff_vector[k];
+        indicator = 0; //reset indicator variable
+      }
+      final_class(j,i)=class_vote;
+    }
+  }
+  
+  
+  NumericVector predicted_class(num_examples);
+  int this_class;
+  int max_val;
+  for(int i=0;i<num_examples;i++)
+  {
+    max_val = 0.;
+    for(int j=0;j<num_classes;j++)
+    {
+      if(final_class(i,j)>max_val)
+        this_class = j+1;
+        max_val = final_class(i,j);
+    }
+    predicted_class[i] = this_class;
+  }
+  
+  NumericMatrix prob_mat(num_examples, num_classes);
+  double row_sum = 0.;
+  for(int i=0;i<num_examples;i++)
+  {
+    row_sum =0.;
+    for(int j=0;j<num_classes;j++)
+      row_sum+=final_class(i,j);
+    
+    for(int j=0;j<num_classes;j++)
+      prob_mat(i,j) = final_class(i,j)/row_sum;
+  }
+  
+  
+  List predict_object;
+  predict_object["votes"] = final_class;
+  predict_object["class"] = predicted_class;
+  predict_object["prob"] = prob_mat;
+  
+  return predict_object;
+  
+   
+}

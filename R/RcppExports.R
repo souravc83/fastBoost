@@ -13,3 +13,7 @@ adaboost_main_loop_ <- function(formula_char, data_df, nIter, wrap_rpart) {
     .Call('fastBoost_adaboost_main_loop_', PACKAGE = 'fastBoost', formula_char, data_df, nIter, wrap_rpart)
 }
 
+predict_adaboost_ <- function(tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict) {
+    .Call('fastBoost_predict_adaboost_', PACKAGE = 'fastBoost', tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict)
+}
+

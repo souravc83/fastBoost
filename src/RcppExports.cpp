@@ -44,3 +44,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// predict_adaboost_
+List predict_adaboost_(List tree_list, NumericVector coeff_vector, DataFrame newdata, int num_examples, Function wrap_rpart_predict);
+RcppExport SEXP fastBoost_predict_adaboost_(SEXP tree_listSEXP, SEXP coeff_vectorSEXP, SEXP newdataSEXP, SEXP num_examplesSEXP, SEXP wrap_rpart_predictSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< List >::type tree_list(tree_listSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type coeff_vector(coeff_vectorSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type newdata(newdataSEXP);
+    Rcpp::traits::input_parameter< int >::type num_examples(num_examplesSEXP);
+    Rcpp::traits::input_parameter< Function >::type wrap_rpart_predict(wrap_rpart_predictSEXP);
+    __result = Rcpp::wrap(predict_adaboost_(tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict));
+    return __result;
+END_RCPP
+}
