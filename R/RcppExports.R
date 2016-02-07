@@ -17,3 +17,7 @@ predict_adaboost_ <- function(tree_list, coeff_vector, newdata, num_examples, wr
     .Call('fastBoost_predict_adaboost_', PACKAGE = 'fastBoost', tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict)
 }
 
+real_adaboost_main_ <- function(formula_char, data_df, vardep, nIter, wrap_rpart) {
+    .Call('fastBoost_real_adaboost_main_', PACKAGE = 'fastBoost', formula_char, data_df, vardep, nIter, wrap_rpart)
+}
+

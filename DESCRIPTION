@@ -1,8 +1,15 @@
 Package: fastBoost
 Type: Package
-Title: a Fast Adaboost Implementation
-Description: A fast implementation of adaboost, suitable fot big datasets
-    and covering various flavors of adaboost
+Title: a fast implementation of adaboost.M1 and real adaboost
+Description: This library implements a Rcpp based blazingly fast implementation
+        of adaboost.m1 and real adaboost. This will be especially  well suited 
+        for big datasets. The library currently supports decision trees as the weak 
+        classifier. Once the classifiers have been trained, they can be used to 
+        predict new datasets. Currently, we support only binary classification task.
+        In addition to calculating the final error, a staged error is also calculated
+        for each additional tree. This can be used to tune the final number of 
+        iterations. A plot of the staged error is also generated to help the user 
+        decide. 
 Version: 1.0
 Date: 2016-01-30
 Author: person("Sourav", "Chatterjee", , "souravc83@gmail.com", c("aut", "cre"))

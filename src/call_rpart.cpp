@@ -77,7 +77,7 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
 {
   //Dataframe should be doubles, checked at R upstream
   char vardep_col = formula_char[0];
-  Rcout<<vardep_col<<std::endl;
+  //TODO: pass vardep to this function
   IntegerVector vardep_init = data_df["Y"];
   IntegerVector vardep(clone(vardep_init));
   vardep = convert_factor_to_int(vardep);
@@ -89,11 +89,12 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
   std::vector<double> weight_vec(num_examples,init_weight_val);
   NumericVector weight_numvec(weight_vec.begin(), weight_vec.end() );
   
-  //initialize to avoid initialize in every loop
+  //initialize to avoid creation of variables in every loop
   IntegerVector tree_prediction;
   double err;
   double alpha;
-  NumericVector weight_numvec_dummy;
+  
+ 
   
   for(int i=0;i<nIter;i++)
   {
@@ -106,7 +107,7 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
     //Rcout<<tree_prediction<<std::endl;
     err = calculate_error(vardep, tree_prediction, weight_numvec);
     
-    if(err>0.5)
+    if(err>=0.5 || err == 0)
     {
       coeff_vector.erase( coeff_vector.begin()+i+1,coeff_vector.end() );
       break;
@@ -122,6 +123,7 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
     
     //Rcout<<"Weight Sum: "<<wt_sum<<std::endl;  
   }
+  
   
   List adaboost_list;
   adaboost_list["trees"] = tree_list;

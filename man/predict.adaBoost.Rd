@@ -12,7 +12,7 @@
 \item{newdata}{dataframe on which we are looking to predict}
 }
 \value{
-predictor predcted object with prediction probabilities
+predictor predicted object with prediction probabilities
 }
 \description{
 makes predictions for an adaboost object on a new dataset

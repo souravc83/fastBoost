@@ -8,10 +8,15 @@
 
 # TODO before CRAN release:
 # boosting.cv: cross validation
-# importance plot: variable importance
-# is extension to multiclass easy?
-# coefficients: Breiman. Zhu?
-
+#from here:
+#http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier
+# score(or error)
+# staged_error
+#handle NA
+#getTree(adaboost_obj, k) -done
+#print
+#summary
+#real adaboost
 adaboost_fast<-function(formula, data, nIter, ...)
 {
   #all precondition checks
@@ -22,7 +27,7 @@ adaboost_fast<-function(formula, data, nIter, ...)
   #fakedata <- data.frame( X=c(rnorm(num_each,0,1),rnorm(num_each,1.5,1)), Y=c(rep(0,num_each),rep(1,num_each) ) )
   #fakedata$Y <- factor(fakedata$Y)
   
-  rcpp_ada_obj <- adaboost_main_loop_(formula_char, data, 10, wrap_rpart)
+  rcpp_ada_obj <- adaboost_main_loop_(formula_char, data, nIter, wrap_rpart)
   trees_list <- rcpp_ada_obj$trees
   coeff_vector<- rcpp_ada_obj$weights
   

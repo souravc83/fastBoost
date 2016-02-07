@@ -59,3 +59,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// real_adaboost_main_
+List real_adaboost_main_(std::string formula_char, DataFrame data_df, IntegerVector vardep, int nIter, Function wrap_rpart);
+RcppExport SEXP fastBoost_real_adaboost_main_(SEXP formula_charSEXP, SEXP data_dfSEXP, SEXP vardepSEXP, SEXP nIterSEXP, SEXP wrap_rpartSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type formula_char(formula_charSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type data_df(data_dfSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type vardep(vardepSEXP);
+    Rcpp::traits::input_parameter< int >::type nIter(nIterSEXP);
+    Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
+    __result = Rcpp::wrap(real_adaboost_main_(formula_char, data_df, vardep, nIter, wrap_rpart));
+    return __result;
+END_RCPP
+}
