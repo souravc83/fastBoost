@@ -8,7 +8,8 @@ List call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_ve
    SEXP return_list = wrap_rpart(formula_char, newdata, weight_vec);
    List rcpp_return_list = as<List>(return_list);
    
-   NumericVector rpart_class = as<NumericVector>(rcpp_return_list["pred"]);
+   //NumericVector rpart_class = as<NumericVector>(rcpp_return_list["pred"]);
+   
    //Rcout<<rpart_class<<std::endl;
    return rcpp_return_list;
 }
@@ -72,6 +73,131 @@ IntegerVector convert_factor_to_int(IntegerVector factor_vec)
 }
 
 
+//This function updates the weights after every iteration for a real
+// adaboost.
+// tree_real pred is prob(Y=0|X). that is how it is defined in 
+//wrap rpart
+//this function implements Algorithm 4, equation(d), Pg 10 in 
+// Zhu et. al. "Multi Class Adaboost", 2006
+//for K=2
+//https://web.stanford.edu/~hastie/Papers/samme.pdf
+NumericVector update_weights_real_ada(IntegerVector dep_variable, 
+                                      NumericVector tree_real_pred, 
+                                      NumericVector weight_vec)
+{
+  int num_examples = dep_variable.size();
+  double eps= 1.e-5; //small number
+  // first correct zeros so that log function works fine
+  for(int i=0;i<num_examples;i++)
+  {
+    if(tree_real_pred[i]<eps)
+      tree_real_pred[i]=eps;
+    if( tree_real_pred[i]>(1.-eps) )
+      tree_real_pred[i] = 1.-eps;
+  }
+  
+  NumericVector updated_weight(clone(weight_vec));
+  double exp_factor;
+  int y_k[2] ={0,0} ;
+  //can do away with y_k assignment, but used for clarity
+  // and possible multi-class expanstion
+  // y_k=1 if class = k, otherwise -1
+  for(int i=0;i<num_examples;i++)
+  {
+    if(dep_variable[i]==1)
+    {
+      y_k[0]=1;
+      y_k[1]=-1;
+    }
+    else
+    {
+      y_k[0]=-1;
+      y_k[1]=1;
+    }
+    exp_factor = -0.5*( y_k[0]*log(tree_real_pred[i]) +
+                        y_k[1]*log(1.-tree_real_pred[i]));
+    updated_weight[i] = weight_vec[i]*exp(exp_factor);
+  }
+  //now normalize the weights
+  double sum_of_wt = 0.;
+  for(int i=0;i<num_examples;i++)
+    sum_of_wt+=updated_weight[i];
+  
+  for(int i=0;i<num_examples;i++)
+    updated_weight[i] = updated_weight[i]/sum_of_wt;
+  
+  return updated_weight;
+  
+  
+}
+
+//This runs a single iteration or real adaboost
+//The weights are always 1 for real adaboost
+List real_boost_iteration(DataFrame data_df, IntegerVector vardep,
+                              NumericVector weight_numvec, 
+                              Function wrap_rpart)
+{
+  List rcpp_result = call_rpart_(wrap_rpart, data_df, weight_numvec);
+  SEXP this_tree = rcpp_result["tree"];
+  NumericVector tree_real_pred = as<NumericVector>(rcpp_result["prob"]);
+  
+  //the error prediction does not change
+  //simply no. of incorrect answers, in SAMME.R too
+  IntegerVector tree_prediction = as<IntegerVector>(rcpp_result["pred"]);
+  double err = calculate_error(vardep, tree_prediction, weight_numvec);
+  
+  
+  
+  //no update weights if error is okay
+  if(err<0.5 && err!=0)
+     weight_numvec =  update_weights_real_ada(vardep, tree_real_pred, weight_numvec);
+  
+  
+  List boost_result;
+  boost_result["tree"] = this_tree;
+  boost_result["error"] = err;
+  boost_result["weight"] = weight_numvec;
+  boost_result["coeff"] = 1.; //coefficient 1 for real adaboost
+  
+  return boost_result;
+}
+
+
+//This runs one single iteration of discrete boost
+// it updates the weight, calculates error and 
+// finds the coefficient alpha
+List discrete_boost_iteration(DataFrame data_df, IntegerVector vardep,
+                              NumericVector weight_numvec, 
+                              Function wrap_rpart)
+{
+  List rcpp_result = call_rpart_(wrap_rpart, data_df, weight_numvec);
+  SEXP this_tree = rcpp_result["tree"];
+  
+  IntegerVector tree_prediction = as<IntegerVector>(rcpp_result["pred"]);
+  double err = calculate_error(vardep, tree_prediction, weight_numvec);
+  double alpha;
+  
+  if (err>0.5 || err == 0)
+    alpha = 0;
+    //no need to update weights since breaking main loop anyway
+  else
+  {
+    alpha = 0.5*log((1.-err)/err);
+    weight_numvec =  update_weights(vardep, tree_prediction, weight_numvec, alpha);
+  }
+  
+  
+  List boost_result;
+  boost_result["tree"] = this_tree;
+  boost_result["error"] = err;
+  boost_result["weight"] = weight_numvec;
+  boost_result["coeff"] = alpha;
+  
+  return boost_result;
+  
+}
+
+
 // [[Rcpp::export]]
 List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter, Function wrap_rpart)
 {
@@ -94,37 +220,24 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
   double err;
   double alpha;
   
- 
-  
   for(int i=0;i<nIter;i++)
   {
-    List rcpp_result = call_rpart_(wrap_rpart, data_df, weight_numvec);
+    List boost_result = real_boost_iteration(data_df, vardep, weight_numvec, wrap_rpart);
     //because rcpp will not accept integers as list names
     std::string list_name = std::to_string(i);
-    tree_list[list_name] = rcpp_result["tree"];
-    tree_prediction = as<IntegerVector>(rcpp_result["pred"]);
-    //Rcout<<vardep<<std::endl;
-    //Rcout<<tree_prediction<<std::endl;
-    err = calculate_error(vardep, tree_prediction, weight_numvec);
-    
+    tree_list[list_name] = boost_result["tree"];
+    err = boost_result["error"];
+    //Rcout<<"Error:"<<err<<std::endl;
     if(err>=0.5 || err == 0)
     {
       coeff_vector.erase( coeff_vector.begin()+i+1,coeff_vector.end() );
       break;
     }
-    //Rcout<<"Error:"<< err<<std::endl;
-    alpha = 0.5*log((1.-err)/err);
-    //Rcout<<alpha<<std::endl;
-    coeff_vector[i] = alpha;
-    weight_numvec =  update_weights(vardep, tree_prediction, weight_numvec, alpha); 
-    //double wt_sum = 0.;
-    //for(int j=0;j<num_examples;j++)
-    //  wt_sum+=weight_numvec[j];
-    
-    //Rcout<<"Weight Sum: "<<wt_sum<<std::endl;  
+    coeff_vector[i] = boost_result["coeff"];
+    weight_numvec =  boost_result["weight"]; 
   }
-  
-  
+
+
   List adaboost_list;
   adaboost_list["trees"] = tree_list;
   adaboost_list["weights"] = coeff_vector;

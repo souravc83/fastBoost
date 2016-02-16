@@ -1,6 +1,28 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+NumericMatrix discrete_predict_matrix(Function wrap_rpart_predict, SEXP this_tree, 
+                                      DataFrame newdata, Numericatrix pred_mat)
+{
+  NumericVector predict_class = as<NumericVector>(wrap_rpart_predict(this_tree,newdata));
+  for(int j=0;j<num_examples;j++)
+    pred_mat(j,i) = predict_class[j];
+  
+  return pred_mat;
+}
+
+// modify the wrap_rpart_predict to get class probabilities.
+//this function implements Algorithm 4, equation(c), Pg 10 in 
+// Zhu et. al. "Multi Class Adaboost", 2006
+//for K=2
+
+NumericMatrix real_predict_matrix(Function wrap_rpart_predict, SEXP this_tree, 
+                                      DataFrame newdata, Numericatrix pred_mat)
+{
+  
+  
+}
+
 
 // [[Rcpp::export]]
 List predict_adaboost_(List tree_list, NumericVector coeff_vector, 

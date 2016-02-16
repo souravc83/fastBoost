@@ -1,5 +1,6 @@
 #'fast implementation of adaboost using Rcpp
 #'@import rpart
+#'@import mlbench
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
