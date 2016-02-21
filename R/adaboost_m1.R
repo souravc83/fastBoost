@@ -14,7 +14,9 @@
 
 adaboost <-function(formula, data, nIter,...)
 {
+  theCall <- match.call()
   adaboost_object <- adaboost_fast(formula,data,nIter, method="M1")
+  adaboost_object$call <- theCall
   return(adaboost_object)
 }
 

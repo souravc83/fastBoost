@@ -11,7 +11,10 @@
 
 print.adaboost <-function(object)
 {
-  cat("No of trees:",length(object$trees_list),"\n",sep="")
-  #print training error
+  print(object$call)
+  print(object$formula)
+  cat("No of trees:",length(object$trees),"\n",sep="")
+  cat("The weights of the trees are:",object$weights,"\n",sep="")
+
 
 }

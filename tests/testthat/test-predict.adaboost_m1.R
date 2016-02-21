@@ -6,6 +6,7 @@ test_that("predicting adaboost works",{
   fakedata$Y <- factor(fakedata$Y)
   #run adaboost
   A <- adaboost(Y~X, fakedata, 10)
+  print(A)
   pred <- predict(A,newdata=fakedata)
   #print(pred$class)
   #print(fakedata$Y)

@@ -8,8 +8,8 @@
     
   })
 #  
-# test_that(" bacteria dataset works with a selection of variables"{
-#    attach(bacteria)
-#    boost_obj <- adaBoost(y~ap+hilo+week,bacteria , 10)
-#    pred <- predict(boost_obj, newdata)
-#  })
+ test_that("bacteria dataset works with a selection of variables",{
+    attach(bacteria)
+    boost_obj <- adaboost(y~ap+hilo+week,bacteria , 10)
+    pred <- predict(boost_obj, bacteria)
+  })

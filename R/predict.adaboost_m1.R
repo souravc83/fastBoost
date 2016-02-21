@@ -25,6 +25,7 @@ predict.adaboost <- function(object, newdata)
   votes <- cpp_list$votes
   predicted_class_int <- cpp_list$class #this is 0 or 1
   predicted_class <- ifelse(predicted_class_int == 0, classnames_map["A"],classnames_map["B"])
+  predicted_class <- factor(predicted_class)
   prob_mat = cpp_list$prob
   
   predictor <- list(formula = formula, votes = votes, 
