@@ -3,9 +3,10 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-List call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_vec) {
-   std::string formula_char = "Y~X";
-   SEXP return_list = wrap_rpart(formula_char, newdata, weight_vec);
+List call_rpart_(SEXP formula_obj, Function wrap_rpart, DataFrame newdata, 
+                  NumericVector weight_vec,SEXP classname_map) {
+   
+   SEXP return_list = wrap_rpart(formula_obj, newdata, weight_vec,classname_map);
    List rcpp_return_list = as<List>(return_list);
    
    //NumericVector rpart_class = as<NumericVector>(rcpp_return_list["pred"]);
@@ -133,11 +134,11 @@ NumericVector update_weights_real_ada(IntegerVector dep_variable,
 
 //This runs a single iteration or real adaboost
 //The weights are always 1 for real adaboost
-List real_boost_iteration(DataFrame data_df, IntegerVector vardep,
+List real_boost_iteration(SEXP formula_obj, DataFrame data_df, IntegerVector vardep,
                               NumericVector weight_numvec, 
-                              Function wrap_rpart)
+                              Function wrap_rpart, SEXP classname_map)
 {
-  List rcpp_result = call_rpart_(wrap_rpart, data_df, weight_numvec);
+  List rcpp_result = call_rpart_(formula_obj, wrap_rpart, data_df, weight_numvec, classname_map);
   SEXP this_tree = rcpp_result["tree"];
   NumericVector tree_real_pred = as<NumericVector>(rcpp_result["prob"]);
   
@@ -166,11 +167,11 @@ List real_boost_iteration(DataFrame data_df, IntegerVector vardep,
 //This runs one single iteration of discrete boost
 // it updates the weight, calculates error and 
 // finds the coefficient alpha
-List discrete_boost_iteration(DataFrame data_df, IntegerVector vardep,
+List discrete_boost_iteration(SEXP formula_obj, DataFrame data_df, IntegerVector vardep,
                               NumericVector weight_numvec, 
-                              Function wrap_rpart)
+                              Function wrap_rpart, SEXP classname_map)
 {
-  List rcpp_result = call_rpart_(wrap_rpart, data_df, weight_numvec);
+  List rcpp_result = call_rpart_(formula_obj, wrap_rpart, data_df, weight_numvec, classname_map);
   SEXP this_tree = rcpp_result["tree"];
   
   IntegerVector tree_prediction = as<IntegerVector>(rcpp_result["pred"]);
@@ -199,14 +200,12 @@ List discrete_boost_iteration(DataFrame data_df, IntegerVector vardep,
 
 
 // [[Rcpp::export]]
-List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter, Function wrap_rpart)
+List adaboost_main_loop_(SEXP formula_obj, DataFrame data_df, int nIter, Function wrap_rpart,
+                         IntegerVector vardep, SEXP classname_map, std::string boost_method)
 {
-  //Dataframe should be doubles, checked at R upstream
-  char vardep_col = formula_char[0];
-  //TODO: pass vardep to this function
-  IntegerVector vardep_init = data_df["Y"];
-  IntegerVector vardep(clone(vardep_init));
-  vardep = convert_factor_to_int(vardep);
+  //Dataframe should be doubles, checked at R upstream??
+  // How about passing data_df as SEXP??
+  
   int num_examples = vardep.size();
   List tree_list = List::create();
   std::vector<double> coeff_vector(nIter,0.0);
@@ -218,14 +217,25 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
   //initialize to avoid creation of variables in every loop
   IntegerVector tree_prediction;
   double err;
-  double alpha;
+  List boost_result;
   
   for(int i=0;i<nIter;i++)
   {
-    List boost_result = real_boost_iteration(data_df, vardep, weight_numvec, wrap_rpart);
+    if( boost_method == "M1")
+    {
+      boost_result = discrete_boost_iteration(formula_obj, data_df, vardep, weight_numvec, 
+                                             wrap_rpart, classname_map);
+    }
+    else
+    {
+      boost_result = real_boost_iteration(formula_obj, data_df, vardep, weight_numvec, 
+                                             wrap_rpart, classname_map);      
+    }
+    
     //because rcpp will not accept integers as list names
     std::string list_name = std::to_string(i);
     tree_list[list_name] = boost_result["tree"];
+    
     err = boost_result["error"];
     //Rcout<<"Error:"<<err<<std::endl;
     if(err>=0.5 || err == 0)
@@ -236,6 +246,8 @@ List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter,
     coeff_vector[i] = boost_result["coeff"];
     weight_numvec =  boost_result["weight"]; 
   }
+  
+  
 
 
   List adaboost_list;

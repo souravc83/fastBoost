@@ -5,48 +5,41 @@
 
 using namespace Rcpp;
 
-// fastboost_rpart_test_
-int fastboost_rpart_test_(int x, Function call_rpart);
-RcppExport SEXP fastBoost_fastboost_rpart_test_(SEXP xSEXP, SEXP call_rpartSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Function >::type call_rpart(call_rpartSEXP);
-    __result = Rcpp::wrap(fastboost_rpart_test_(x, call_rpart));
-    return __result;
-END_RCPP
-}
 // call_rpart_
-List call_rpart_(Function wrap_rpart, DataFrame newdata, NumericVector weight_vec);
-RcppExport SEXP fastBoost_call_rpart_(SEXP wrap_rpartSEXP, SEXP newdataSEXP, SEXP weight_vecSEXP) {
+List call_rpart_(SEXP formula_obj, Function wrap_rpart, DataFrame newdata, NumericVector weight_vec, SEXP classname_map);
+RcppExport SEXP fastBoost_call_rpart_(SEXP formula_objSEXP, SEXP wrap_rpartSEXP, SEXP newdataSEXP, SEXP weight_vecSEXP, SEXP classname_mapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type formula_obj(formula_objSEXP);
     Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type newdata(newdataSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type weight_vec(weight_vecSEXP);
-    __result = Rcpp::wrap(call_rpart_(wrap_rpart, newdata, weight_vec));
+    Rcpp::traits::input_parameter< SEXP >::type classname_map(classname_mapSEXP);
+    __result = Rcpp::wrap(call_rpart_(formula_obj, wrap_rpart, newdata, weight_vec, classname_map));
     return __result;
 END_RCPP
 }
 // adaboost_main_loop_
-List adaboost_main_loop_(std::string formula_char, DataFrame data_df, int nIter, Function wrap_rpart);
-RcppExport SEXP fastBoost_adaboost_main_loop_(SEXP formula_charSEXP, SEXP data_dfSEXP, SEXP nIterSEXP, SEXP wrap_rpartSEXP) {
+List adaboost_main_loop_(SEXP formula_obj, DataFrame data_df, int nIter, Function wrap_rpart, IntegerVector vardep, SEXP classname_map, std::string boost_method);
+RcppExport SEXP fastBoost_adaboost_main_loop_(SEXP formula_objSEXP, SEXP data_dfSEXP, SEXP nIterSEXP, SEXP wrap_rpartSEXP, SEXP vardepSEXP, SEXP classname_mapSEXP, SEXP boost_methodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type formula_char(formula_charSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type formula_obj(formula_objSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type data_df(data_dfSEXP);
     Rcpp::traits::input_parameter< int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
-    __result = Rcpp::wrap(adaboost_main_loop_(formula_char, data_df, nIter, wrap_rpart));
+    Rcpp::traits::input_parameter< IntegerVector >::type vardep(vardepSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type classname_map(classname_mapSEXP);
+    Rcpp::traits::input_parameter< std::string >::type boost_method(boost_methodSEXP);
+    __result = Rcpp::wrap(adaboost_main_loop_(formula_obj, data_df, nIter, wrap_rpart, vardep, classname_map, boost_method));
     return __result;
 END_RCPP
 }
 // predict_adaboost_
-List predict_adaboost_(List tree_list, NumericVector coeff_vector, DataFrame newdata, int num_examples, Function wrap_rpart_predict);
-RcppExport SEXP fastBoost_predict_adaboost_(SEXP tree_listSEXP, SEXP coeff_vectorSEXP, SEXP newdataSEXP, SEXP num_examplesSEXP, SEXP wrap_rpart_predictSEXP) {
+List predict_adaboost_(List tree_list, NumericVector coeff_vector, DataFrame newdata, int num_examples, Function wrap_rpart_predict, SEXP classnames_map);
+RcppExport SEXP fastBoost_predict_adaboost_(SEXP tree_listSEXP, SEXP coeff_vectorSEXP, SEXP newdataSEXP, SEXP num_examplesSEXP, SEXP wrap_rpart_predictSEXP, SEXP classnames_mapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -55,22 +48,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DataFrame >::type newdata(newdataSEXP);
     Rcpp::traits::input_parameter< int >::type num_examples(num_examplesSEXP);
     Rcpp::traits::input_parameter< Function >::type wrap_rpart_predict(wrap_rpart_predictSEXP);
-    __result = Rcpp::wrap(predict_adaboost_(tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict));
-    return __result;
-END_RCPP
-}
-// real_adaboost_main_
-List real_adaboost_main_(std::string formula_char, DataFrame data_df, IntegerVector vardep, int nIter, Function wrap_rpart);
-RcppExport SEXP fastBoost_real_adaboost_main_(SEXP formula_charSEXP, SEXP data_dfSEXP, SEXP vardepSEXP, SEXP nIterSEXP, SEXP wrap_rpartSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< std::string >::type formula_char(formula_charSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type data_df(data_dfSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type vardep(vardepSEXP);
-    Rcpp::traits::input_parameter< int >::type nIter(nIterSEXP);
-    Rcpp::traits::input_parameter< Function >::type wrap_rpart(wrap_rpartSEXP);
-    __result = Rcpp::wrap(real_adaboost_main_(formula_char, data_df, vardep, nIter, wrap_rpart));
+    Rcpp::traits::input_parameter< SEXP >::type classnames_map(classnames_mapSEXP);
+    __result = Rcpp::wrap(predict_adaboost_(tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict, classnames_map));
     return __result;
 END_RCPP
 }

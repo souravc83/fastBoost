@@ -9,9 +9,9 @@
 #'print(A)
 #'
 
-print.adaBoost <-function(object)
+print.adaboost <-function(object)
 {
-  #cat("No of trees:",length(object$trees_list),"\n",sep="")
+  cat("No of trees:",length(object$trees_list),"\n",sep="")
   #print training error
 
 }

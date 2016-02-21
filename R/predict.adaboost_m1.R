@@ -11,18 +11,20 @@
 #'pred <- predict(A,newdata=fakedata)
 
 
-predict.adaBoost <- function(object, newdata)
+predict.adaboost <- function(object, newdata)
 {
   
   
   formula <- object$formula
   tree_list <- object$trees
   coeff_vector <- object$weights
+  classnames_map <- object$classnames
   num_examples <- nrow(newdata)
   cpp_list <- predict_adaboost_(tree_list, coeff_vector, newdata,
-                                num_examples, wrap_rpart_predict)
-  votes = cpp_list$votes
-  predicted_class = cpp_list$class
+                                num_examples, wrap_rpart_predict,classnames_map)
+  votes <- cpp_list$votes
+  predicted_class_int <- cpp_list$class #this is 0 or 1
+  predicted_class <- ifelse(predicted_class_int == 0, classnames_map["A"],classnames_map["B"])
   prob_mat = cpp_list$prob
   
   predictor <- list(formula = formula, votes = votes, 

@@ -4,7 +4,7 @@
 \alias{adaboost_fast}
 \title{fast implementation of adaboost using Rcpp}
 \usage{
-adaboost_fast(formula, data, nIter, ...)
+adaboost_fast(formula, data, nIter, method)
 }
 \arguments{
 \item{formula}{Formula for models}
@@ -14,7 +14,7 @@ adaboost_fast(formula, data, nIter, ...)
 \item{nIter}{no. of classifiers}
 }
 \value{
-adaboost_object An object of class adaboost containing each tree, and its corresponding weight
+adaboost_object An object of class adaboost/real_adaboost containing each tree, and its corresponding weight
 }
 \description{
 fast implementation of adaboost using Rcpp

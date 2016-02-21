@@ -28,3 +28,16 @@ devtools::install_github("souravc83/fastBoost")
 library("fastBoost")
 ```
 
+
+## Functions
+This package currently supports the following functions
+1) adaboost()
+2) real_adaboost()
+3) predict.adaboost()
+4) predict.real_adaboost()
+5) get_tree()
+6) get_error()
+7) staged_error()?
+8) plot.staged_error()?
+9) cv.adaboost()?
+

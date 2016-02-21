@@ -5,7 +5,9 @@ test_that("rpart call from Rcpp works",{
   fakedata$Y <- factor(fakedata$Y)
   num_examples <- nrow(fakedata)
   weights <- rep(1./num_examples, num_examples)
-  x <- call_rpart_(wrap_rpart, fakedata, weights)
+  classname_map <- levels(fakedata[,"Y"])
+  names(classname_map) = c("0","1")
+  x <- call_rpart_(Y~X,wrap_rpart, fakedata, weights, classname_map)
   
   tree <- x$tree
   predictions <- predict(tree, newdata=fakedata, type="class")

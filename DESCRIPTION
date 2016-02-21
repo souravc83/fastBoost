@@ -22,7 +22,8 @@ Depends:
 Imports:
     Rcpp,
     rpart,
-    knitr
+    knitr,
+    MASS
 Suggests:
     testthat
 VignetteBuilder: knitr

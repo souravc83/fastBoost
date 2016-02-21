@@ -1,11 +1,26 @@
+
+#'checks if inputs are in an expected format
+#'and stops right away if something is wrong
+#'@param formula formula for models
+#'@param data input dataframe
+precondition_checks <-function(formula, data)
+{
+  if( nrow(data)==0)
+    stop("data contains 0 rows after removing NA in dependent variable", call.=F)
+  
+  depvar_name <- as.character(formula)[2]
+  if(nlevels(data[,depvar_name]) !=2)
+    stop("Dependent variables must have two levels", call.=F)
+  
+}
+
+
 #'fast implementation of adaboost using Rcpp
 #'@import rpart
-#'@import mlbench
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
-#'@return adaboost_object An object of class adaboost containing each tree, and its corresponding weight
-#'@export
+#'@return adaboost_object An object of class adaboost/real_adaboost containing each tree, and its corresponding weight
 
 # TODO before CRAN release:
 # boosting.cv: cross validation
@@ -18,24 +33,45 @@
 #print
 #summary
 #real adaboost
-adaboost_fast<-function(formula, data, nIter, ...)
+adaboost_fast<-function(formula, data, nIter, method)
 {
-  #all precondition checks
+  if(!all(method %in% c("M1","real") ))
+    stop(paste("method must be M1 or real. It is",method), call.=F)
+  #initial cleaning
+  #(1) remove NAs in the dependent variable
+  #(2) make dependent variable a factor if not already
+  depvar_name <- as.character(formula)[2]
+  data <-data[ !(is.na(data[,depvar_name])) , ]
   
-  #formula_char <- as.character(formula)
-  formula_char <-"Y~X"
-  #num_each <- 100
-  #fakedata <- data.frame( X=c(rnorm(num_each,0,1),rnorm(num_each,1.5,1)), Y=c(rep(0,num_each),rep(1,num_each) ) )
-  #fakedata$Y <- factor(fakedata$Y)
+  if( class(data[,depvar_name]) !="factor" )
+    data[,depvar_name] <- factor(data,depvar_name)
   
-  rcpp_ada_obj <- adaboost_main_loop_(formula_char, data, nIter, wrap_rpart)
+  #check if preconditions are satisfied
+  precondition_checks(formula, data)
+  
+  #convert the factor to 0/1 and remember names
+  if( typeof(data[1,depvar_name]) == "integer")
+    classnames_map <- as.numeric(levels(data[,depvar_name]))
+  else
+    classnames_map <- levels(data[,depvar_name])
+  
+  names(classnames_map) <- c("A","B")
+  vardep = ifelse(data[,depvar_name]==classnames_map["A"],0,1)  
+
+  rcpp_ada_obj <- adaboost_main_loop_(formula, data, nIter, wrap_rpart,
+                                      vardep, classnames_map, method)
   trees_list <- rcpp_ada_obj$trees
   coeff_vector<- rcpp_ada_obj$weights
   
   
+  
   ceoff_vector <- rcpp_ada_obj$coeff_vector
-  adaboost_object <- list(formula = formula, trees=trees_list, weights = coeff_vector)
-  class(adaboost_object) <- "adaBoost"
+  adaboost_object <- list(formula = formula, trees=trees_list, weights = coeff_vector, 
+                          classnames = classnames_map)
+  if(method=="M1")
+    class(adaboost_object) <- "adaboost"
+  else
+    class(adaboost_object) <-"real_adaboost"
   return(adaboost_object)
   
 }
