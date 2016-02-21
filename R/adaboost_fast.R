@@ -9,8 +9,7 @@ precondition_checks <-function(formula, data)
   
   depvar_name <- as.character(formula)[2]
   if(nlevels(data[,depvar_name]) !=2)
-    stop("Dependent variables must have two levels", call.=F)
-  
+    stop("Dependent variables must have two levels", call.=F) 
 }
 
 
@@ -34,8 +33,8 @@ precondition_checks <-function(formula, data)
 #real adaboost
 adaboost_fast<-function(formula, data, nIter, method)
 {
-  if(!all(method %in% c("M1","real") ))
-    stop(paste("method must be M1 or real. It is",method), call.=F)
+  if(!all(method %in% c("M1","SAMME.R") ))
+    stop(paste("method must be M1 or SAMME.R. It is",method), call.=F)
   #initial cleaning
   #(1) remove NAs in the dependent variable
   #(2) make dependent variable a factor if not already

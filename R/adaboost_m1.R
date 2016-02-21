@@ -1,5 +1,3 @@
-#'adaBoost
-#'
 #'Implements Freund's Adaboost.M1 algorithm
 #'@import rpart
 #'@param formula Formula for models
