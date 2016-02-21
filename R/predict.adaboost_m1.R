@@ -28,31 +28,21 @@ predict.adaboost <- function(object, newdata)
   predicted_class <- factor(predicted_class)
   prob_mat = cpp_list$prob
   
+  #if data is labeled, calculate prediction error
+  test_error <- NA
+  depvar_name <- object$dependent_variable 
+  if( depvar_name %in% names(newdata))
+  {
+    vardep = ifelse(newdata[,depvar_name]==classnames_map["A"],0,1)
+    test_error <- calculate_test_error_(vardep, predicted_class_int)
+  }
+    
+  
+  
   predictor <- list(formula = formula, votes = votes, 
-                    class = predicted_class,prob = prob_mat)
+                    class = predicted_class,prob = prob_mat,
+                    error = test_error)
   
-  
-#   nIter <- length(object$trees)
-#   num_examples <- nrow(newdata)
-#   pred_mat <- array(0,c(num_examples, nIter))
-#   
-#   
-#   #get the prediction from each tree
-#   for(i in 1:nIter)
-#   {
-#     this_tree <- object$trees[[i]]
-#     pred_mat[,i] <- predict(this_tree, newdata, type="class")
-#   }
-#   final_class <- matrix(0,num_examples, 2)
-#   final_class[,1] <- (matrix(as.numeric(pred_mat==1), nrow= num_examples))%*%object$weights
-#   final_class[,2] <- (matrix(as.numeric(pred_mat==2), nrow= num_examples))%*%object$weights
-#   
-#   predicted_class <- rep(0,num_examples)
-#   for(i in 1:num_examples)
-#     predicted_class[i] <- which(final_class[i,] == max(final_class[i,]))
-#   prob_mat <- final_class/apply(final_class,1,sum)
-#   
-#   predictor <- list( formula= formula, votes= final_class, class = predicted_class, prob = prob_mat)
   
   return(predictor)
 }

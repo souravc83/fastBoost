@@ -6,11 +6,19 @@ test_that("predicting adaboost works",{
   fakedata$Y <- factor(fakedata$Y)
   #run adaboost
   A <- adaboost(Y~X, fakedata, 10)
-  print(A)
+  #print(A)
   pred <- predict(A,newdata=fakedata)
-  #print(pred$class)
-  #print(fakedata$Y)
+  print(paste("Adaboost Error:",pred$error))
+  expect_true(pred$error<1.)
+})
+
+test_that("adaboost errors are predicted correctly",{
+  num_each <- 1000
+  fakedata <- data.frame( X=c(rnorm(num_each,0,1),rnorm(num_each,1.5,1)), Y=c(rep(0,num_each),rep(1,num_each) ) )
+  fakedata$Y <- factor(fakedata$Y)
+  #run adaboost
+  A <- adaboost(Y~X, fakedata, 10)
+  pred <- predict(A,newdata=fakedata)
   err <- length(which(pred$class!=fakedata$Y))/nrow(fakedata)
-  print(paste("Adaboost Error:",err))
-  expect_true(err<1.)
+  expect_true( abs(err - pred$error)<1e-5 ) 
 })

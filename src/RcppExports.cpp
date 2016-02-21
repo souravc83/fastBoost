@@ -37,6 +37,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// calculate_test_error_
+double calculate_test_error_(IntegerVector vardep, IntegerVector predicted_class_int);
+RcppExport SEXP fastBoost_calculate_test_error_(SEXP vardepSEXP, SEXP predicted_class_intSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type vardep(vardepSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type predicted_class_int(predicted_class_intSEXP);
+    __result = Rcpp::wrap(calculate_test_error_(vardep, predicted_class_int));
+    return __result;
+END_RCPP
+}
 // predict_adaboost_
 List predict_adaboost_(List tree_list, NumericVector coeff_vector, DataFrame newdata, int num_examples, Function wrap_rpart_predict, SEXP classnames_map);
 RcppExport SEXP fastBoost_predict_adaboost_(SEXP tree_listSEXP, SEXP coeff_vectorSEXP, SEXP newdataSEXP, SEXP num_examplesSEXP, SEXP wrap_rpart_predictSEXP, SEXP classnames_mapSEXP) {

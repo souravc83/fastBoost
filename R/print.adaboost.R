@@ -13,6 +13,7 @@ print.adaboost <-function(object)
 {
   print(object$call)
   print(object$formula)
+  cat("Dependent Variable: ", object$dependent_variable,"\n",sep="")
   cat("No of trees:",length(object$trees),"\n",sep="")
   cat("The weights of the trees are:",object$weights,"\n",sep="")
 

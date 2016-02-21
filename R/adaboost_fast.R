@@ -68,7 +68,7 @@ adaboost_fast<-function(formula, data, nIter, method)
   
   ceoff_vector <- rcpp_ada_obj$coeff_vector
   adaboost_object <- list(formula = formula, trees=trees_list, weights = coeff_vector, 
-                          classnames = classnames_map)
+                          classnames = classnames_map, dependent_variable = depvar_name)
   if(method=="M1")
     class(adaboost_object) <- "adaboost"
   else

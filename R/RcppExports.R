@@ -9,6 +9,10 @@ adaboost_main_loop_ <- function(formula_obj, data_df, nIter, wrap_rpart, vardep,
     .Call('fastBoost_adaboost_main_loop_', PACKAGE = 'fastBoost', formula_obj, data_df, nIter, wrap_rpart, vardep, classname_map, boost_method)
 }
 
+calculate_test_error_ <- function(vardep, predicted_class_int) {
+    .Call('fastBoost_calculate_test_error_', PACKAGE = 'fastBoost', vardep, predicted_class_int)
+}
+
 predict_adaboost_ <- function(tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict, classnames_map) {
     .Call('fastBoost_predict_adaboost_', PACKAGE = 'fastBoost', tree_list, coeff_vector, newdata, num_examples, wrap_rpart_predict, classnames_map)
 }
