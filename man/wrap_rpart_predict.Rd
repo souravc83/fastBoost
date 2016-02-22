@@ -11,9 +11,11 @@ wrap_rpart_predict(tree_object, newdata, classnames_map)
 \item{tree_object}{object of class rpart}
 
 \item{newdata}{dataframe}
+
+\item{classnames_map}{named vector mapping classnames to 0/1}
 }
 \value{
-pred_vec integer vector. This contains
+integer_class integer vector. This contains
        the labels of the predicted class 
        converted to integers.
 }

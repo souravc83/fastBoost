@@ -2,8 +2,8 @@
 #'@import rpart
 #'@param formula_obj formula object
 #'@param newdata dataframe with requisite columns
+#'@param weight_vec vector of numeric values,weights for each example
 #'@param classnames_map named vector mapping classnames to 0/1.
-#'@export
 
 wrap_rpart <- function(formula_obj,newdata, weight_vec,classnames_map)
 {

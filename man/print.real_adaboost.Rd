@@ -4,10 +4,12 @@
 \alias{print.real_adaboost}
 \title{S3 method to print an real_adaboost object}
 \usage{
-\method{print}{real_adaboost}(object)
+\method{print}{real_adaboost}(x, ...)
 }
 \arguments{
-\item{object}{object of class real_adaboost}
+\item{x}{object of class real_adaboost}
+
+\item{...}{arguments passed to print.default}
 }
 \value{
 None

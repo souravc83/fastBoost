@@ -12,6 +12,8 @@ real_adaboost(formula, data, nIter, ...)
 \item{data}{Input dataframe}
 
 \item{nIter}{no. of classifiers}
+
+\item{...}{other optional arguments, not implemented now}
 }
 \description{
 Implements Zhu et al's real adaboost or SAMME.R algorithm

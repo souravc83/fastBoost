@@ -2,6 +2,7 @@
 #'@import rpart
 #'@param object an object of class adaboost
 #'@param newdata dataframe on which we are looking to predict
+#'@param ... arguments passed to predict.default
 #'@return predictor predicted object with prediction probabilities
 #'@export
 #'@examples
@@ -9,7 +10,7 @@
 #'fakedata$Y <- factor(fakedata$Y)
 #'A <- adaboost(Y~X, fakedata, 10)
 #'pred <- predict(A,newdata=fakedata)
-predict.adaboost <- function(object, newdata)
+predict.adaboost <- function(object, newdata,...)
 {
   return( predict_adaboost_internal(object,newdata,"M1") )
 }
@@ -19,6 +20,7 @@ predict.adaboost <- function(object, newdata)
 #'@import rpart
 #'@param object an object of class real_adaboost
 #'@param newdata dataframe on which we are looking to predict
+#'@param ... arguments passed to predict.default
 #'@return predictor predicted object with prediction probabilities
 #'@export
 #'@examples
@@ -26,7 +28,7 @@ predict.adaboost <- function(object, newdata)
 #'fakedata$Y <- factor(fakedata$Y)
 #'A <- real_adaboost(Y~X, fakedata, 10)
 #'pred <- predict(A,newdata=fakedata)
-predict.real_adaboost <- function(object, newdata)
+predict.real_adaboost <- function(object, newdata,...)
 {
   return( predict_adaboost_internal(object,newdata,"SAMME.R") ) 
 }
@@ -74,8 +76,6 @@ predict_adaboost_internal <-function(object, newdata, method)
     test_error <- calculate_test_error_(vardep, predicted_class_int)
   }
     
-  
-  
   predictor <- list(formula = formula, votes = votes, 
                     class = predicted_class,prob = prob_mat,
                     error = test_error)

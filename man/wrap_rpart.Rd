@@ -7,7 +7,13 @@
 wrap_rpart(formula_obj, newdata, weight_vec, classnames_map)
 }
 \arguments{
+\item{formula_obj}{formula object}
+
 \item{newdata}{dataframe with requisite columns}
+
+\item{weight_vec}{vector of numeric values,weights for each example}
+
+\item{classnames_map}{named vector mapping classnames to 0/1.}
 }
 \description{
 wraps the rpart call for ease of use with Rcpp

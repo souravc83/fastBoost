@@ -12,6 +12,8 @@ adaboost(formula, data, nIter, ...)
 \item{data}{Input dataframe}
 
 \item{nIter}{no. of classifiers}
+
+\item{...}{other optional arguments, not implemented now}
 }
 \description{
 Implements Freund's Adaboost.M1 algorithm

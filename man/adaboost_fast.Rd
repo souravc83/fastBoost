@@ -12,6 +12,8 @@ adaboost_fast(formula, data, nIter, method)
 \item{data}{Input dataframe}
 
 \item{nIter}{no. of classifiers}
+
+\item{method}{a string, either "M1" or "SAMME.R"}
 }
 \value{
 adaboost_object An object of class adaboost/real_adaboost containing each tree, and its corresponding weight
