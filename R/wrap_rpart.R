@@ -1,6 +1,8 @@
 #'wraps the rpart call for ease of use with Rcpp
 #'@import rpart
+#'@param formula_obj formula object
 #'@param newdata dataframe with requisite columns
+#'@param classnames_map named vector mapping classnames to 0/1.
 #'@export
 
 wrap_rpart <- function(formula_obj,newdata, weight_vec,classnames_map)
@@ -13,6 +15,7 @@ wrap_rpart <- function(formula_obj,newdata, weight_vec,classnames_map)
   train_prob <- predict(tree_fit, type="prob")[,1]
   #convert the class to 0/1 using the classname_map provided as input
   integer_class <- ifelse( train_learn == classnames_map["A"],0, 1)
+  
   return_list <- list(tree = tree_fit, pred = integer_class, prob = train_prob)
   return(return_list)
 

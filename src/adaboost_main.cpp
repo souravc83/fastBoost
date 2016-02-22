@@ -105,7 +105,7 @@ NumericVector update_weights_real_ada(IntegerVector dep_variable,
   // y_k=1 if class = k, otherwise -1
   for(int i=0;i<num_examples;i++)
   {
-    if(dep_variable[i]==1)
+    if(dep_variable[i]==0)
     {
       y_k[0]=1;
       y_k[1]=-1;
@@ -179,8 +179,16 @@ List discrete_boost_iteration(SEXP formula_obj, DataFrame data_df, IntegerVector
   double alpha;
   
   if (err>0.5 || err == 0)
-    alpha = 0;
-    //no need to update weights since breaking main loop anyway
+  {
+    if( err == 0)
+      alpha = 1.0;
+    else
+    {
+      Rcout<<"Weak Learner has error greater than 0.5, exiting.."<<std::endl;
+      alpha = 0.0;
+    }
+    
+  }
   else
   {
     alpha = 0.5*log((1.-err)/err);
@@ -238,17 +246,15 @@ List adaboost_main_loop_(SEXP formula_obj, DataFrame data_df, int nIter, Functio
     
     err = boost_result["error"];
     //Rcout<<"Error:"<<err<<std::endl;
+    coeff_vector[i] = boost_result["coeff"];
     if(err>=0.5 || err == 0)
     {
       coeff_vector.erase( coeff_vector.begin()+i+1,coeff_vector.end() );
       break;
     }
-    coeff_vector[i] = boost_result["coeff"];
+   
     weight_numvec =  boost_result["weight"]; 
   }
-  
-  
-
 
   List adaboost_list;
   adaboost_list["trees"] = tree_list;

@@ -7,5 +7,5 @@ test_that("predicting adaboost works",{
   #run adaboost
   A <- real_adaboost(Y~X, fakedata, 10)
   pred <- predict(A,fakedata)
-  print(paste("Real Adaboost Error:", pred$error))
+  print(paste("Real Adaboost Error on fakedata:", pred$error))
 })

@@ -2,23 +2,21 @@ library(fastBoost)
 library(MASS)
   
 test_that("Bacteria dataset works",{
-    attach(bacteria)
+    data(bacteria)
     boost_obj <- adaboost(y~.,bacteria , 10)
     pred <- predict(boost_obj,bacteria)
     print(paste("Adaboost Error:",pred$error))
-    detach(bacteria)
 })
 #  
 test_that("bacteria dataset works with a selection of variables",{
-    attach(bacteria)
+    data(bacteria)
     boost_obj <- adaboost(y~ap+hilo+week,bacteria , 10)
     pred <- predict(boost_obj, bacteria)
     print(paste("Adaboost Error:",pred$error))
-    detach(bacteria)
 })
 
 test_that("bacteria dataset works with unlabeled data",{
-    attach(bacteria)
+    data(bacteria)
     boost_obj <- adaboost(y~ap+hilo+week,bacteria , 10)
     bacteria_2 <-bacteria
     unlabeled_cols <-names(bacteria_2)[!(names(bacteria_2) %in% "y") ]
@@ -26,6 +24,5 @@ test_that("bacteria dataset works with unlabeled data",{
     pred <- predict(boost_obj, bacteria_2)
     print(paste("Adaboost Error:",pred$error))
     expect_true(is.na(pred$error))
-    detach(bacteria)
 })
   

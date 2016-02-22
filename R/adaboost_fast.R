@@ -18,6 +18,7 @@ precondition_checks <-function(formula, data)
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
+#'@param method a string, either "M1" or "SAMME.R"
 #'@return adaboost_object An object of class adaboost/real_adaboost containing each tree, and its corresponding weight
 
 # TODO before CRAN release:

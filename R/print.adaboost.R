@@ -1,5 +1,6 @@
 #'S3 method to print an adaboost object
 #'@param object object of class adaboost
+#'@param ... arguments passed to print.default
 #'@return None
 #'@export
 #'@examples
@@ -9,7 +10,7 @@
 #'print(A)
 #'
 
-print.adaboost <-function(object)
+print.adaboost <-function(object,...)
 {
   print(object$call)
   print(object$formula)
@@ -21,6 +22,7 @@ print.adaboost <-function(object)
 
 #'S3 method to print an real_adaboost object
 #'@param object object of class real_adaboost
+#'@param ... arguments passed to print.default
 #'@return None
 #'@export
 #'@examples
@@ -30,7 +32,7 @@ print.adaboost <-function(object)
 #'print(A)
 #'
 
-print.real_adaboost <-function(object)
+print.real_adaboost <-function(object,...)
 {
   print(object$call)
   print(object$formula)

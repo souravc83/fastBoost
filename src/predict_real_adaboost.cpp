@@ -9,7 +9,7 @@ using namespace Rcpp;
 // multi-class
 double calculate_hk(double* prob_arr, int class_int)
 {
-  double eps= 1.e-5; //small number
+  double eps= 1.e-12; //small number
   double this_log_prob = log(prob_arr[class_int]+eps);
   double sum_log_prob = 0.;
   for(int i=0;i<2;i++)

@@ -3,6 +3,7 @@
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
+#'@param ... other optional arguments, not implemented now
 #'@export 
 #'@examples 
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
