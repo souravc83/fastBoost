@@ -1,27 +1,24 @@
-#'makes predictions for an adaboost object on a new dataset
+#'makes predictions for an real_adaboost object on a new dataset
 #'@import rpart
-#'@param object an object of class adaboost
+#'@param object an object of class real_adaboost
 #'@param newdata dataframe on which we are looking to predict
 #'@return predictor predicted object with prediction probabilities
 #'@export
 #'@examples
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
-#'A <- adaboost(Y~X, fakedata, 10)
+#'A <- real_adaboost(Y~X, fakedata, 10)
 #'pred <- predict(A,newdata=fakedata)
 
-
-predict.adaboost <- function(object, newdata)
+predict.real_adaboost <- function(object, newdata)
 {
-  
-  
   formula <- object$formula
   tree_list <- object$trees
   coeff_vector <- object$weights
   classnames_map <- object$classnames
   num_examples <- nrow(newdata)
-  cpp_list <- predict_adaboost_(tree_list, coeff_vector, newdata,
-                                num_examples, wrap_rpart_predict,classnames_map)
+  cpp_list <- predict_real_adaboost_(tree_list, coeff_vector, newdata,
+                                num_examples, wrap_rpart_predict_real)
   votes <- cpp_list$votes
   predicted_class_int <- cpp_list$class #this is 0 or 1
   predicted_class <- ifelse(predicted_class_int == 0, classnames_map["A"],classnames_map["B"])
@@ -36,7 +33,7 @@ predict.adaboost <- function(object, newdata)
     vardep = ifelse(newdata[,depvar_name]==classnames_map["A"],0,1)
     test_error <- calculate_test_error_(vardep, predicted_class_int)
   }
-    
+  
   
   
   predictor <- list(formula = formula, votes = votes, 
@@ -46,4 +43,3 @@ predict.adaboost <- function(object, newdata)
   
   return(predictor)
 }
-

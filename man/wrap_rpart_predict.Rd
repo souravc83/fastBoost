@@ -5,7 +5,7 @@
 \title{wraps the prediction from a tree for ease of use 
 with Rcpp}
 \usage{
-wrap_rpart_predict(tree_object, newdata)
+wrap_rpart_predict(tree_object, newdata, classnames_map)
 }
 \arguments{
 \item{tree_object}{object of class rpart}

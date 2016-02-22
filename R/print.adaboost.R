@@ -3,7 +3,7 @@
 #'@return None
 #'@export
 #'@examples
-#'#'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
+#'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
 #'A <- adaboost(Y~X, fakedata, 10)
 #'print(A)
@@ -24,7 +24,7 @@ print.adaboost <-function(object)
 #'@return None
 #'@export
 #'@examples
-#'#'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
+#'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
 #'A <- real_adaboost(Y~X, fakedata, 10)
 #'print(A)
