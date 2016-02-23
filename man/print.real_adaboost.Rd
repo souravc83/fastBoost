@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.adaboost.R
 \name{print.real_adaboost}
 \alias{print.real_adaboost}
-\title{S3 method to print an real_adaboost object}
+\title{Print real adaboost model summary}
 \usage{
 \method{print}{real_adaboost}(x, ...)
 }
@@ -15,13 +15,20 @@
 None
 }
 \description{
-S3 method to print an real_adaboost object
+S3 method to print a real_adaboost object
+}
+\details{
+Displays basic information on the model,
+such as function call, dependent variable
+and the number of trees
 }
 \examples{
 fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 fakedata$Y <- factor(fakedata$Y)
-A <- real_adaboost(Y~X, fakedata, 10)
-print(A)
-
+test_real_adaboost<- real_adaboost(Y~X, fakedata, 10)
+print(test_real_adaboost)
+}
+\seealso{
+\code{\link{print.adaboost}}
 }
 

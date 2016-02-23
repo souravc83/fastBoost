@@ -1,4 +1,11 @@
-#'Implements Freund's Adaboost.M1 algorithm
+#'Adaboost.M1 algorithm
+#'
+#'Implements Freund and Schapire's Adaboost.M1 algorithm
+#'
+#'This implements the Adaboost.M1 algorithm for a binary classification task.
+#'The target variable must a a factor with exactly two levels.
+#'The final classifier is a linear combination of weak decision tree classifiers.
+#'
 #'@import rpart
 #'@param formula Formula for models
 #'@param data Input dataframe
@@ -8,8 +15,11 @@
 #'@examples 
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
-#'test.adaboost <- adaboost(Y~X, data=fakedata,10)
-
+#'test_adaboost <- adaboost(Y~X, data=fakedata,10)
+#'@seealso \code{\link{real_adaboost}},\code{\link{predict.adaboost}}
+#'@references Freund, Y. and Schapire, R.E. (1996):\dQuote{Experiments with a new boosting algorithm}
+#'. \emph{In Proceedings of the Thirteenth International Conference on Machine Learning}, 
+#'pp. 148--156, Morgan Kaufmann.
 
 adaboost <-function(formula, data, nIter,...)
 {
@@ -19,11 +29,3 @@ adaboost <-function(formula, data, nIter,...)
   return(adaboost_object)
 }
 
-# 
-# library(microbenchmark)
-# 
-# my_time <- microbenchmark(run_my_adaboost(fakedata), times=25)
-# print(my_time)
-# bag_time <- microbenchmark(run_adabag_adaboost(fakedata), times=25)
-# print(bag_time)
-# 

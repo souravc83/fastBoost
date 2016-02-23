@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_adaboost.R
 \name{predict.real_adaboost}
 \alias{predict.real_adaboost}
-\title{makes predictions for an real_adaboost object on a new dataset}
+\title{predict method for real_adaboost objects}
 \usage{
 \method{predict}{real_adaboost}(object, newdata, ...)
 }
@@ -17,12 +17,24 @@
 predictor predicted object with prediction probabilities
 }
 \description{
-makes predictions for an real_adaboost object on a new dataset
+predictions for model corresponding to real_adaboost algorithm
+makes predictions for an adaboost object on a new dataset
+using the real_adaboost algorithm, 
+and also calculates the error if the target variable is 
+avaiable in the dataset. The target variable is not required 
+for the prediction to work.
+However, the user must ensure that the test data has the same 
+columns which were used as inputs to fit the original model.
 }
 \examples{
 fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 fakedata$Y <- factor(fakedata$Y)
-A <- real_adaboost(Y~X, fakedata, 10)
-pred <- predict(A,newdata=fakedata)
+test_real_adaboost <- real_adaboost(Y~X, fakedata, 10)
+pred <- predict(test_real_adaboost,newdata=fakedata)
+print(pred$error)
+
+}
+\seealso{
+\code{\link{real_adaboost}}
 }
 

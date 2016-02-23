@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_adaboost.R
 \name{predict.adaboost}
 \alias{predict.adaboost}
-\title{makes predictions for an adaboost object on a new dataset}
+\title{predict method for adaboost objects}
 \usage{
 \method{predict}{adaboost}(object, newdata, ...)
 }
@@ -17,12 +17,22 @@
 predictor predicted object with prediction probabilities
 }
 \description{
+predictions for model corresponding to adaboost.m1 algorithm
 makes predictions for an adaboost object on a new dataset
+and also calculates the error if the target variable is 
+avaiable in the dataset. The target variable is not required 
+for the prediction to work.
+However, the user must ensure that the test data has the same 
+columns which were used as inputs to fit the original model.
 }
 \examples{
 fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 fakedata$Y <- factor(fakedata$Y)
-A <- adaboost(Y~X, fakedata, 10)
-pred <- predict(A,newdata=fakedata)
+test_adaboost <- adaboost(Y~X, fakedata, 10)
+pred <- predict( test_adaboost,newdata=fakedata)
+print(pred$error)
+}
+\seealso{
+\code{\link{adaboost}}
 }
 

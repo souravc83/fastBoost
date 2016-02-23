@@ -1,5 +1,13 @@
+#'Fetches a decision tree
+#'
+#'returns a single weak decision tree classifier which is part
+#'of the strong classifier
+
 #'returns an individual tree from the adaboost object
-#'@param object object of class fastBoost
+#'This can provide the user with some clarity on the 
+#'individual building blocks of the strong classifier
+#'
+#'@param object object of class adaboost
 #'@param tree_num integer describing the tree to get
 #'@return tree object of class rpart
 #'@export
@@ -8,6 +16,7 @@
 #'fakedata$Y <- factor(fakedata$Y)
 #'A <- adaboost(Y~X, fakedata, 10)
 #'tree <- get_tree(A,5)
+#'@seealso \code{\link{adaboost}}
 
 get_tree <-function(object, tree_num)
 {

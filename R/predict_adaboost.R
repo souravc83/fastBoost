@@ -1,4 +1,16 @@
+#'predict method for adaboost objects
+#'
+#'predictions for model corresponding to adaboost.m1 algorithm
+
 #'makes predictions for an adaboost object on a new dataset
+#'and also calculates the error if the target variable is 
+#'avaiable in the dataset. The target variable is not required 
+#'for the prediction to work.
+#'However, the user must ensure that the test data has the same 
+#'columns which were used as inputs to fit the original model.
+#'
+#'@seealso \code{\link{adaboost}}
+
 #'@import rpart
 #'@param object an object of class adaboost
 #'@param newdata dataframe on which we are looking to predict
@@ -8,15 +20,29 @@
 #'@examples
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
-#'A <- adaboost(Y~X, fakedata, 10)
-#'pred <- predict(A,newdata=fakedata)
+#'test_adaboost <- adaboost(Y~X, fakedata, 10)
+#'pred <- predict( test_adaboost,newdata=fakedata)
+#'print(pred$error)
+
 predict.adaboost <- function(object, newdata,...)
 {
   return( predict_adaboost_internal(object,newdata,"M1") )
 }
 
 
-#'makes predictions for an real_adaboost object on a new dataset
+
+#'predict method for real_adaboost objects
+#'
+#'predictions for model corresponding to real_adaboost algorithm
+
+#'makes predictions for an adaboost object on a new dataset
+#'using the real_adaboost algorithm, 
+#'and also calculates the error if the target variable is 
+#'avaiable in the dataset. The target variable is not required 
+#'for the prediction to work.
+#'However, the user must ensure that the test data has the same 
+#'columns which were used as inputs to fit the original model.
+#'
 #'@import rpart
 #'@param object an object of class real_adaboost
 #'@param newdata dataframe on which we are looking to predict
@@ -26,8 +52,12 @@ predict.adaboost <- function(object, newdata,...)
 #'@examples
 #'fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 #'fakedata$Y <- factor(fakedata$Y)
-#'A <- real_adaboost(Y~X, fakedata, 10)
-#'pred <- predict(A,newdata=fakedata)
+#'test_real_adaboost <- real_adaboost(Y~X, fakedata, 10)
+#'pred <- predict(test_real_adaboost,newdata=fakedata)
+#'print(pred$error)
+#'
+#'@seealso \code{\link{real_adaboost}}
+#'
 predict.real_adaboost <- function(object, newdata,...)
 {
   return( predict_adaboost_internal(object,newdata,"SAMME.R") ) 
@@ -39,9 +69,11 @@ predict.real_adaboost <- function(object, newdata,...)
 
 #'internal method which predicts both adaboost_M1 and 
 #'real adaboost
+#'@noRd
 #'@param object an object of class adaboost
 #'@param newdata dataframe on which we are looking to predict
 #'@param method M1 or SAMME.R
+#'@keywords internal
 predict_adaboost_internal <-function(object, newdata, method)
 {
   if(!all(method %in% c("M1","SAMME.R") ))

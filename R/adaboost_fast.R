@@ -1,7 +1,11 @@
+#'Checks for preconditions
+#' Checks to see if input satisfies preconditions 
 #'checks if inputs are in an expected format
 #'and stops right away if something is wrong
+#'@noRd
 #'@param formula formula for models
 #'@param data input dataframe
+#'@keywords internal
 precondition_checks <-function(formula, data)
 {
   if( nrow(data)==0)
@@ -14,24 +18,18 @@ precondition_checks <-function(formula, data)
 
 
 #'fast implementation of adaboost using Rcpp
+#'
+#'main internal function where both M1 and real 
+#'adaboost calls are redirected
+#'
+#'@noRd
 #'@import rpart
 #'@param formula Formula for models
 #'@param data Input dataframe
 #'@param nIter no. of classifiers 
 #'@param method a string, either "M1" or "SAMME.R"
 #'@return adaboost_object An object of class adaboost/real_adaboost containing each tree, and its corresponding weight
-
-# TODO before CRAN release:
-# boosting.cv: cross validation
-#from here:
-#http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier
-# score(or error)
-# staged_error
-#handle NA
-#getTree(adaboost_obj, k) -done
-#print
-#summary
-#real adaboost
+#'@keywords internal
 adaboost_fast<-function(formula, data, nIter, method)
 {
   if(!all(method %in% c("M1","SAMME.R") ))

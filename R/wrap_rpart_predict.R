@@ -1,5 +1,6 @@
 #'wraps the prediction from a tree for ease of use 
 #'with Rcpp
+#'@noRd
 #'@import rpart
 #'@param tree_object object of class rpart
 #'@param newdata dataframe
@@ -7,7 +8,7 @@
 #'@return integer_class integer vector. This contains
 #'        the labels of the predicted class 
 #'        converted to integers.
-
+#'@keywords internal.
 wrap_rpart_predict <- function(tree_object, newdata, classnames_map)
 {
   test_learn <- predict(tree_object, newdata, type="class")
@@ -17,12 +18,13 @@ wrap_rpart_predict <- function(tree_object, newdata, classnames_map)
 
 #'wraps the prediction of probability from a fitted tree
 #'for use with Rcpp
+#'@noRd
 #'@import rpart
 #'@param tree_object object of class rpart
 #'@param newdata dataframe
 #'@return pred_vec vector of probability that
 #'                 example belongs to class 0
-
+#'@keywords internal.
 
 wrap_rpart_predict_real <-function(tree_object, newdata)
 {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/adaboost_m1.R
 \name{adaboost}
 \alias{adaboost}
-\title{Implements Freund's Adaboost.M1 algorithm}
+\title{Adaboost.M1 algorithm}
 \usage{
 adaboost(formula, data, nIter, ...)
 }
@@ -16,11 +16,24 @@ adaboost(formula, data, nIter, ...)
 \item{...}{other optional arguments, not implemented now}
 }
 \description{
-Implements Freund's Adaboost.M1 algorithm
+Implements Freund and Schapire's Adaboost.M1 algorithm
+}
+\details{
+This implements the Adaboost.M1 algorithm for a binary classification task.
+The target variable must a a factor with exactly two levels.
+The final classifier is a linear combination of weak decision tree classifiers.
 }
 \examples{
 fakedata <- data.frame( X=c(rnorm(100,0,1),rnorm(100,1,1)), Y=c(rep(0,100),rep(1,100) ) )
 fakedata$Y <- factor(fakedata$Y)
-test.adaboost <- adaboost(Y~X, data=fakedata,10)
+test_adaboost <- adaboost(Y~X, data=fakedata,10)
+}
+\references{
+Freund, Y. and Schapire, R.E. (1996):\dQuote{Experiments with a new boosting algorithm}
+. \emph{In Proceedings of the Thirteenth International Conference on Machine Learning}, 
+pp. 148--156, Morgan Kaufmann.
+}
+\seealso{
+\code{\link{real_adaboost}},\code{\link{predict.adaboost}}
 }
 
